@@ -47,6 +47,12 @@ six suds-jurko vatnumber vobject Werkzeug wsgiref XlsxWriter xlwt xlrd xlutils d
 COPY ./oe.conf  /~/base/
 # Copy Odoo configuration file
 # odoo.conf will be modified after set DATABASE MANAGE PASSWORD
+ENV HOST_BASE_DIR /~/base
+ENV INSTANCE_NAME base
+VOLUME ["${HOST_BASE_DIR}/addons:/addons",
+        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/var/lib/postgresql:/var/lib/postgresql",
+        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/extra-addons:/extra-addons",
+        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/data:/data"]
 
 # Set the default config file
 #RUN mkdir /extra-addons && mkdir /data
