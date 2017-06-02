@@ -41,13 +41,13 @@ RUN set -x; \
          git clone https://github.com/osbzr/base.git&&\
          git clone https://github.com/osbzr/gooderp_addons.git
 
-#Install wkhtmltopdf
-RUN set -x; \
-        curl -o wkhtmltox.deb -SL http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb \
-        && dpkg --force-depends -i wkhtmltox.deb \
-        && apt-get update \
-        && apt-get -y install -f --no-install-recommends
-COPY ./simsun.ttc /usr/share/fonts
+#Install wkhtmltopdf  在线编译失败... 这段注释
+#RUN set -x; \
+#        curl -o wkhtmltox.deb -SL http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb \
+#        && dpkg --force-depends -i wkhtmltox.deb \
+#       && apt-get update \
+#        && apt-get -y install -f --no-install-recommends
+#COPY ./simsun.ttc /usr/share/fonts
 
 # Set the default config file
 COPY ./oe.conf  /~/base/
