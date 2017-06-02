@@ -48,7 +48,6 @@ RUN set -x; \
         && apt-get -y install -f --no-install-recommends \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb 
-COPY ./simsun.ttc /usr/share/fonts
 
 # Set the default config file
 COPY ./oe.conf  /~/base/
