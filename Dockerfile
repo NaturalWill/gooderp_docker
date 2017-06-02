@@ -40,22 +40,23 @@ RUN set -x; \
         pyserial pyusb qrcode six suds-jurko wsgiref XlsxWriter xlrd xlutils docxtpl python-ooxml&&\
          git clone https://github.com/osbzr/base.git&&\
          git clone https://github.com/osbzr/gooderp_addons.git
-
 #Install wkhtmltopdf  在线编译失败... 这段注释
-#RUN set -x; \
-#        curl -o wkhtmltox.deb -SL http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb \
-#        && dpkg --force-depends -i wkhtmltox.deb \
-#       && apt-get update \
-#        && apt-get -y install -f --no-install-recommends
-#COPY ./simsun.ttc /usr/share/fonts
+RUN set -x; \
+        curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
+        && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - \
+        && dpkg --force-depends -i wkhtmltox.deb \
+        && apt-get -y install -f --no-install-recommends \
+        && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
+        && rm -rf /var/lib/apt/lists/* wkhtmltox.deb 
+COPY ./simsun.ttc /usr/share/fonts
 
 # Set the default config file
 COPY ./oe.conf  /~/base/
 #RUN mkdir /extra-addons && mkdir /data
-RUN mkdir /home/extra-addons
+RUN mkdir /~/extra-addons
 
 #开放端口
-EXPOSE 8069
+EXPOSE 8888
 
 # Copy startup script
 COPY ./startup.sh /
