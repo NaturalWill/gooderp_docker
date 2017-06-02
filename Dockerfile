@@ -20,35 +20,41 @@ RUN set -x; \
         && apt-get install -y --no-install-recommends --assume-yes \
             sudo \
             ca-certificates curl node-less npm python-gevent python-pyinotify \
-            python-renderpm git-core git-gui git-doc \
- python-dateutil  python-docutils python-feedparser  python-gdata python-jinja2 python-ldap python-libxslt1 python-lxml \
- python-mako python-mock python-openid python-psycopg2 python-psutil python-pybabel python-pychart python-pydot \
- python-pyparsing python-reportlab  python-simplejson \
- python-tz python-unittest2 python-vatnumber python-vobject python-webdav python-werkzeug python-xlwt python-yaml \
- python-zsi python-pyPdf python-decorator python-passlib python-requests\
-        python-dev python-pip python-setuptools \
-        libffi-dev libxml2-dev libxslt1-dev postgresql-client postgresql-contrib\
-        libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev python-imaging\
-        liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python-tk python-psycopg2
+            python-renderpm git-core git-gui git-doc python-dateutil  python-docutils \
+            python-feedparser  python-gdata python-jinja2 python-ldap python-libxslt1 python-lxml \
+            python-mako python-mock python-openid python-psycopg2 python-psutil python-pybabel \
+            python-pychart python-pydot python-pyparsing python-reportlab  python-simplejson \
+            python-tz python-unittest2 python-vatnumber python-vobject python-webdav python-werkzeug \
+            python-xlwt python-yaml python-zsi python-pyPdf python-decorator python-passlib python-requests\
+            python-dev python-pip python-setuptools libffi-dev libxml2-dev libxslt1-dev postgresql-client \
+            postgresql-contrib libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev python-imaging\
+            liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python-tk python-psycopg2
        
+
+
 # Usage: WORKDIR /pathdocker 
 WORKDIR ~/
-#Install Odoo
 MAINTAINER CLONE 相应的项目
 RUN set -x; \
-        pip install decorator docutils ebaysdk feedparser gevent greenlet jcconv httplib2 pdfkit \ 
-Jinja2 lxml Mako MarkupSafe mock ofxparse passlib psutil psycogreen  pydot pyparsing pyPdf \
-pyserial Python-Chart python-dateutil python-ldap python-openid pytz pyusb PyYAML qrcode requests \
-six suds-jurko vatnumber vobject Werkzeug wsgiref XlsxWriter xlwt xlrd xlutils docxtpl python-ooxml&&\
+        pip install  ebaysdk greenlet jcconv httplib2 pdfkit MarkupSafe ofxparse psycogreen \
+        pyserial pyusb qrcode six suds-jurko wsgiref XlsxWriter xlrd xlutils docxtpl python-ooxml&&\
          git clone https://github.com/osbzr/base.git&&\
          git clone https://github.com/osbzr/gooderp_addons.git
 
+#Install wkhtmltopdf
+RUN set -x; \
+        curl -o wkhtmltox.deb -SL http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb \
+        && dpkg --force-depends -i wkhtmltox.deb \
+        && apt-get update \
+        && apt-get -y install -f --no-install-recommends
+COPY ./simsun.ttc /usr/share/fonts
 
-COPY ./oe.conf  /~/base/
 # Set the default config file
+COPY ./oe.conf  /~/base/
 #RUN mkdir /extra-addons && mkdir /data
- 
+RUN mkdir /home/extra-addons
 
+#开放端口
 EXPOSE 8069
 
 # Copy startup script
