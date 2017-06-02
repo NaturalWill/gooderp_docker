@@ -9,9 +9,11 @@ RUN set -x; \
         apt-get update \
         && apt-get install -y postgresql
 USER postgres
+
 RUN /etc/init.d/postgresql start  && psql --command "CREATE USER admin WITH SUPERUSER CREATEDB REPLICATION;"
 RUN /etc/init.d/postgresql start  && psql --command "alter user admin with password 'admin';"
-USER admin
+USER root
+
 ENV PGDATA /var/lib/postgresql/data
  # Install some deps, lessc and less-plugin-clean-css
 # Cannot install wkhtmltopdf,default in ubuntu without header&footer
@@ -30,8 +32,6 @@ RUN set -x; \
             postgresql-contrib libtiff4-dev libjpeg8-dev zlib1g-dev libfreetype6-dev python-imaging\
             liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python-tk python-psycopg2
        
-
-
 # Usage: WORKDIR /pathdocker 
 WORKDIR ~/
 MAINTAINER CLONE 相应的项目
