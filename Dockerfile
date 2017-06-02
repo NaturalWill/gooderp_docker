@@ -36,7 +36,7 @@ WORKDIR ~/
 #Install Odoo
 MAINTAINER CLONE 相应的项目
 RUN set -x; \
-        pip install decorator docutils ebaysdk feedparser gevent greenlet jcconv \ 
+        pip install decorator docutils ebaysdk feedparser gevent greenlet jcconv httplib2 pdfkit \ 
 Jinja2 lxml Mako MarkupSafe mock ofxparse passlib psutil psycogreen  pydot pyparsing pyPdf \
 pyserial Python-Chart python-dateutil python-ldap python-openid pytz pyusb PyYAML qrcode requests \
 six suds-jurko vatnumber vobject Werkzeug wsgiref XlsxWriter xlwt xlrd xlutils docxtpl python-ooxml&&\
@@ -45,15 +45,6 @@ six suds-jurko vatnumber vobject Werkzeug wsgiref XlsxWriter xlwt xlrd xlutils d
 
 
 COPY ./oe.conf  /~/base/
-# Copy Odoo configuration file
-# odoo.conf will be modified after set DATABASE MANAGE PASSWORD
-ENV HOST_BASE_DIR /~/base
-ENV INSTANCE_NAME base
-VOLUME ["${HOST_BASE_DIR}/addons:/addons",
-        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/var/lib/postgresql:/var/lib/postgresql",
-        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/extra-addons:/extra-addons",
-        "${HOST_BASE_DIR}/customers/${INSTANCE_NAME}/data:/data"]
-
 # Set the default config file
 #RUN mkdir /extra-addons && mkdir /data
  
