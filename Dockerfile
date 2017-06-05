@@ -3,10 +3,6 @@ MAINTAINER gooderp61001
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
 RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
-USER root
-RUN useradd --create-home --no-log-init --shell /bin/bash admin
-RUN adduser admin sudoRUN echo 'admin:admin' | chpasswd
-USER admin
 
 #Install and setup postgresql
 RUN set -x; \
@@ -20,6 +16,7 @@ USER admin
 ENV PGDATA /var/lib/postgresql/data
  # Install some deps, lessc and less-plugin-clean-css
 # Cannot install wkhtmltopdf,default in ubuntu without header&footer
+USER root
 RUN set -x; \
         apt-get update \
         && apt-get install -y --no-install-recommends --assume-yes \
@@ -60,6 +57,9 @@ RUN mkdir /~/extra-addons
 #开放端口
 EXPOSE 8888 8071
 # Copy startup script
+#不使用root用户创建
+RUN useradd noroot -u 1000 -s /bin/bash
+USER noroot
 COPY ./startup.sh /
 ENTRYPOINT ["/bin/bash","/startup.sh"]
 
