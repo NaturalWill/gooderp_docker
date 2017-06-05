@@ -9,10 +9,11 @@ RUN set -x; \
         apt-get update \
         && apt-get install -y postgresql
 USER postgres
-
+RUN useradd --create-home --no-log-init --shell /bin/bash admin
+RUN adduser admin sudoRUN echo 'admin:admin' | chpasswd
+USER admin
 RUN /etc/init.d/postgresql start  && psql --command "CREATE USER admin WITH SUPERUSER CREATEDB REPLICATION;"
 RUN /etc/init.d/postgresql start  && psql --command "alter user admin with password 'admin';"
-USER root
 
 ENV PGDATA /var/lib/postgresql/data
  # Install some deps, lessc and less-plugin-clean-css
