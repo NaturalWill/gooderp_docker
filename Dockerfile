@@ -12,7 +12,6 @@ USER postgres
 
 RUN /etc/init.d/postgresql start  && psql --command "CREATE USER admin WITH SUPERUSER CREATEDB REPLICATION;"
 RUN /etc/init.d/postgresql start  && psql --command "alter user admin with password 'admin';"
-USER admin
 ENV PGDATA /var/lib/postgresql/data
  # Install some deps, lessc and less-plugin-clean-css
 # Cannot install wkhtmltopdf,default in ubuntu without header&footer
