@@ -3,18 +3,20 @@ MAINTAINER gooderp61001
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
 RUN locale-gen en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
+USER root
+RUN useradd --create-home --no-log-init --shell /bin/bash admin
+RUN adduser admin sudoRUN echo 'admin:admin' | chpasswd
+USER admin
 
 #Install and setup postgresql
 RUN set -x; \
         apt-get update \
         && apt-get install -y postgresql
 USER postgres
-RUN useradd --create-home --no-log-init --shell /bin/bash admin
-RUN adduser admin sudoRUN echo 'admin:admin' | chpasswd
-USER admin
+
 RUN /etc/init.d/postgresql start  && psql --command "CREATE USER admin WITH SUPERUSER CREATEDB REPLICATION;"
 RUN /etc/init.d/postgresql start  && psql --command "alter user admin with password 'admin';"
-
+USER admin
 ENV PGDATA /var/lib/postgresql/data
  # Install some deps, lessc and less-plugin-clean-css
 # Cannot install wkhtmltopdf,default in ubuntu without header&footer
