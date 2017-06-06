@@ -18,3 +18,5 @@ docker ps
 docker port gooderp
 -e 设置环境变量 当要添加python依赖包时可以调用本地的 python 环境
  docker run -name=gooderp -i -d -t -p 9999:8888  -v /home/addons:/~/extra-addons -e PYTHONPATH='/python_path' gilbertyuan/gooderp
+ 
+docker run -name=gooderp -i -d -t -p 9999:8888  -v /home/yuan/myerp/gooderp_addons:/~/gooderp_addons  gilbertyuan/gooderp
